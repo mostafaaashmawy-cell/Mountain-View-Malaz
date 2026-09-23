@@ -1,19 +1,19 @@
 /**
  * Mountain View Luxury Landing Page - properties-e
- * Interactive JavaScript & Zapier Webhook Integration
+ * High-Conversion Interactive JavaScript & Zapier Webhook Integration
  */
 
 // ============================================================================
-// CONFIGURATION
+// CONFIGURATION & ZAPIER WEBHOOK
 // ============================================================================
-// Replace the URL below with your Zapier "Catch Hook" Webhook URL:
-const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/XXXXXX/YYYYYY/';
+const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25429357/uclzmpn/';
 
 const WHATSAPP_PHONE = '01033373331';
 const WHATSAPP_INTL = '201033373331';
 
 document.addEventListener('DOMContentLoaded', () => {
   initFormHandler();
+  initProjectFormTriggers();
   initScrollAnimations();
   initModal();
 });
@@ -26,12 +26,12 @@ function initFormHandler() {
   if (!form) return;
 
   const submitBtn = form.querySelector('.btn-submit');
-  const phoneInput = form.querySelector('input[name="phone"]');
+  const phoneInput = form.querySelector('input[name="phoneNumber"]');
+  const formSuccessBox = document.getElementById('form-success-box');
 
-  // Format phone input nicely
+  // Format phone input nicely (digits only)
   if (phoneInput) {
     phoneInput.addEventListener('input', (e) => {
-      // Keep only numbers
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     });
   }
@@ -39,18 +39,18 @@ function initFormHandler() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const fullName = form.querySelector('input[name="fullName"]').value.trim();
-    const phone = phoneInput ? phoneInput.value.trim() : '';
-    const projectSelect = form.querySelector('select[name="project"]');
-    const project = projectSelect ? projectSelect.value : 'Mountain View General Inquiry';
+    const formData = new FormData(form);
+    const fullName = (formData.get('fullName') || '').toString().trim();
+    const phoneNumber = (formData.get('phoneNumber') || '').toString().trim();
+    const project = (formData.get('project') || 'Mountain View General Inquiry').toString();
 
-    // Basic Validation
+    // Validation
     if (!fullName || fullName.length < 2) {
       alert('Please enter your full name.');
       return;
     }
 
-    if (!phone || phone.length < 9) {
+    if (!phoneNumber || phoneNumber.length < 9) {
       alert('Please enter a valid phone number (e.g. 01033373331).');
       return;
     }
@@ -63,55 +63,50 @@ function initFormHandler() {
 
     // Extract URL query params for marketing tracking (UTM tags)
     const urlParams = new URLSearchParams(window.location.search);
-    const trackingData = {
-      utm_source: urlParams.get('utm_source') || '',
-      utm_medium: urlParams.get('utm_medium') || '',
-      utm_campaign: urlParams.get('utm_campaign') || '',
-      utm_content: urlParams.get('utm_content') || '',
-      utm_term: urlParams.get('utm_term') || ''
-    };
+    const utm_source = urlParams.get('utm_source') || '';
+    const utm_medium = urlParams.get('utm_medium') || '';
+    const utm_campaign = urlParams.get('utm_campaign') || '';
 
-    // Prepare Webhook Payload
-    const payload = {
+    // Prepare Webhook Payload matching Zapier requirements
+    const data = {
       fullName: fullName,
-      phone: phone,
-      formattedPhone: phone.startsWith('0') ? `+20${phone.substring(1)}` : phone,
+      phoneNumber: phoneNumber,
+      landingPageUrl: window.location.href,
+      submissionDate: new Date().toISOString(),
+      // Helpful supplementary data for properties-e CRM
       project: project,
       consultancy: 'properties-e',
-      submissionDate: new Date().toISOString(),
-      submissionDateFormatted: new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' }),
-      pageUrl: window.location.href,
-      referrer: document.referrer || 'Direct',
-      ...trackingData
+      utm_source: utm_source,
+      utm_medium: utm_medium,
+      utm_campaign: utm_campaign
     };
 
     try {
-      // Check if Zapier Webhook is configured
-      const isPlaceholder = ZAPIER_WEBHOOK_URL.includes('XXXXXX');
-      
-      if (!isPlaceholder) {
-        // Send payload to Zapier webhook
-        await fetch(ZAPIER_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors', // Standard for Zapier webhook endpoints to prevent browser CORS blocks
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-      } else {
-        console.info('Zapier Webhook is in simulation mode (placeholder URL). Payload dispatched:', payload);
-        // Simulate small network delay for smooth UX
-        await new Promise(resolve => setTimeout(resolve, 600));
+      // POST to Zapier Webhook
+      await fetch(ZAPIER_WEBHOOK_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      // Show in-form success state
+      if (formSuccessBox) {
+        form.style.display = 'none';
+        formSuccessBox.style.display = 'block';
+        const nameSpan = formSuccessBox.querySelector('.client-name');
+        if (nameSpan) nameSpan.textContent = fullName;
       }
 
-      // Success feedback
+      // Also trigger the luxury modal for high-engagement conversion
       showSuccessModal(fullName, project);
       form.reset();
 
     } catch (error) {
-      console.error('Error submitting form to Zapier:', error);
-      // Even in case of network variance, show confirmation and provide instant WhatsApp fallback
+      console.error('Submission notification:', error);
+      // Ensure smooth user experience even if browser restricts CORS response
+      if (formSuccessBox) {
+        form.style.display = 'none';
+        formSuccessBox.style.display = 'block';
+      }
       showSuccessModal(fullName, project);
     } finally {
       if (submitBtn) {
@@ -123,7 +118,37 @@ function initFormHandler() {
 }
 
 /**
- * Success modal display
+ * Quick-action: clicking "Request Price Sheet" on any project card
+ * scrolls to the form and pre-selects that project
+ */
+function initProjectFormTriggers() {
+  const triggerBtns = document.querySelectorAll('.trigger-project-form');
+  const projectSelect = document.getElementById('project');
+  const formCard = document.querySelector('.lead-card');
+
+  triggerBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetProject = btn.getAttribute('data-project');
+      
+      if (projectSelect && targetProject) {
+        projectSelect.value = targetProject;
+      }
+
+      if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Add subtle focus glow
+        formCard.classList.add('highlight-form');
+        setTimeout(() => {
+          formCard.classList.remove('highlight-form');
+        }, 1500);
+      }
+    });
+  });
+}
+
+/**
+ * Success modal display with instant WhatsApp follow-up CTA
  */
 function showSuccessModal(name, project) {
   const modal = document.getElementById('success-modal');
@@ -136,7 +161,7 @@ function showSuccessModal(name, project) {
 
   const waBtn = modal.querySelector('.btn-modal-wa');
   if (waBtn) {
-    const encodedMsg = encodeURIComponent(`Hello properties-e, I just submitted an inquiry for ${project}. My name is ${name}.`);
+    const encodedMsg = encodeURIComponent(`Hello properties-e, I just requested the official price list and availability for ${project}. My name is ${name}.`);
     waBtn.href = `https://wa.me/${WHATSAPP_INTL}?text=${encodedMsg}`;
   }
 
