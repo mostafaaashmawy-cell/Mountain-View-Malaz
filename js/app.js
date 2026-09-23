@@ -103,6 +103,14 @@ function initFormHandler() {
         if (nameSpan) nameSpan.textContent = fullName;
       }
 
+      // Google Tag Conversion Event
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'generate_lead', {
+          event_category: 'engagement',
+          event_label: 'Mountain View Lead Form'
+        });
+      }
+
       // Also trigger the luxury modal for high-engagement conversion
       showSuccessModal(fullName, fullPhoneNumber);
       form.reset();
