@@ -14,6 +14,7 @@ const WHATSAPP_INTL = '201033373331';
 document.addEventListener('DOMContentLoaded', () => {
   initFormHandler();
   initProjectFormTriggers();
+  initWhatsAppConversionTracking();
   initScrollAnimations();
   initModal();
 });
@@ -103,7 +104,17 @@ function initFormHandler() {
         if (nameSpan) nameSpan.textContent = fullName;
       }
 
-      // Google Tag Conversion Event
+      // Google Ads & Analytics Conversion Events
+      if (typeof window.gtag_report_conversion === 'function') {
+        window.gtag_report_conversion();
+      } else if (typeof window.gtag === 'function') {
+        window.gtag('event', 'conversion', {
+          'send_to': 'AW-18462270869/Ka2mCPrmtoIdEJXLv-NE',
+          'value': 1.0,
+          'currency': 'EGP'
+        });
+      }
+
       if (typeof window.gtag === 'function') {
         window.gtag('event', 'generate_lead', {
           event_category: 'engagement',
@@ -225,3 +236,26 @@ function initScrollAnimations() {
     elements.forEach(el => el.classList.add('visible'));
   }
 }
+
+/**
+ * Track Google Ads conversions on all WhatsApp link clicks
+ */
+function initWhatsAppConversionTracking() {
+  document.addEventListener('click', (e) => {
+    const waLink = e.target.closest('a[href*="wa.me"]');
+    if (waLink) {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'conversion', {
+          'send_to': 'AW-18462270869/Ka2mCPrmtoIdEJXLv-NE',
+          'value': 1.0,
+          'currency': 'EGP'
+        });
+        window.gtag('event', 'whatsapp_click', {
+          event_category: 'engagement',
+          event_label: waLink.href
+        });
+      }
+    }
+  });
+}
+

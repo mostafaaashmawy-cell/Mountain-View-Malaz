@@ -9,6 +9,29 @@
     gtag('js', new Date());
 
     gtag('config', 'G-C8G81VEPNH');
+    gtag('config', 'AW-18462270869');
+  </script>
+
+  <!-- Event snippet for Mountain View conversion page -->
+  <script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined' && url) {
+        window.location = url;
+      }
+    };
+    if (typeof gtag === 'function') {
+      gtag('event', 'conversion', {
+          'send_to': 'AW-18462270869/Ka2mCPrmtoIdEJXLv-NE',
+          'value': 1.0,
+          'currency': 'EGP',
+          'event_callback': callback
+      });
+    } else {
+      callback();
+    }
+    return false;
+  }
   </script>
 
   <meta charset="utf-8" />
