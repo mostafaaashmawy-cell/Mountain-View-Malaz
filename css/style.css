@@ -1,6 +1,6 @@
 /* ==========================================================================
    Mountain View Luxury Collection - properties-e
-   Ultra-Premium Luxury Real Estate Stylesheet - Azure & Emerald Edition
+   Ultra-Premium Luxury Real Estate Stylesheet - Full Responsive Mobile Optimized
    ========================================================================== */
 
 :root {
@@ -55,6 +55,7 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -66,6 +67,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  width: 100%;
 }
 
 img {
@@ -273,13 +275,6 @@ button, input, select {
   padding-top: 10px;
 }
 
-@media (max-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-}
-
 /* Hero Left Content */
 .badge-exclusive {
   display: inline-flex;
@@ -393,12 +388,6 @@ button, input, select {
   font-weight: 600;
   color: #ffffff;
   margin-top: 6px;
-}
-
-@media (max-width: 640px) {
-  .hero-stats {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* Clean High-Converting Form Card (No text above form) */
@@ -966,18 +955,6 @@ button, input, select {
   fill: currentColor;
 }
 
-@media (max-width: 640px) {
-  .features-grid, .pricing-grid {
-    grid-template-columns: 1fr;
-  }
-  .project-cta-group {
-    flex-direction: column;
-  }
-  .btn-whatsapp-project, .btn-request-project {
-    width: 100%;
-  }
-}
-
 /* properties-e Advantage Section */
 .advantage-section {
   position: relative;
@@ -1066,12 +1043,6 @@ button, input, select {
   margin-top: 10px;
 }
 
-@media (max-width: 640px) {
-  .advantage-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Site Footer */
 .site-footer {
   border-top: 1px solid var(--border-subtle);
@@ -1125,7 +1096,7 @@ button, input, select {
   text-underline-offset: 4px;
 }
 
-/* Floating WhatsApp Quick Action Button (Green on All Devices) */
+/* Floating WhatsApp Quick Action Button */
 .floating-whatsapp {
   position: fixed;
   bottom: 24px;
@@ -1168,7 +1139,7 @@ button, input, select {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 20px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -1183,7 +1154,7 @@ button, input, select {
   background: var(--bg-navy);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-lg);
-  padding: 40px 32px;
+  padding: 36px 28px;
   max-width: 480px;
   width: 100%;
   text-align: center;
@@ -1191,6 +1162,8 @@ button, input, select {
   transform: translateY(20px);
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 30px var(--accent-glow);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-overlay.active .modal-dialog {
@@ -1198,9 +1171,9 @@ button, input, select {
 }
 
 .modal-icon-circle {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 18px;
   border-radius: 50%;
   background: rgba(37, 211, 102, 0.15);
   border: 1px solid var(--wa-green);
@@ -1212,22 +1185,22 @@ button, input, select {
 
 .modal-title {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: 1.85rem;
   color: #ffffff;
 }
 
 .modal-desc {
   font-size: 14px;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--text-secondary);
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .modal-cta-group {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 24px;
 }
 
 .btn-modal-wa {
@@ -1351,4 +1324,338 @@ button, input, select {
 .fade-up.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ==========================================================================
+   Comprehensive Mobile & Tablet Optimizations (Responsive Design)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .hero-section {
+    min-height: auto;
+    padding-bottom: 50px;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Prevent iOS automatic input zoom (requires font-size >= 16px) */
+  .form-input,
+  .country-select,
+  .phone-number-input {
+    font-size: 16px !important;
+  }
+
+  /* Header adjustments */
+  .site-header {
+    padding: 12px 0 10px;
+  }
+  .header-container {
+    padding: 0 16px;
+  }
+  .master-logo {
+    width: 74px;
+    height: 82px;
+  }
+  .master-logo img {
+    width: 250px;
+    top: -60px;
+    left: -87px;
+  }
+  .brand-subtext {
+    margin-top: 6px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+  }
+
+  /* Hero Section Mobile */
+  .hero-section {
+    min-height: auto;
+    padding-bottom: 45px;
+  }
+  .hero-content {
+    padding: 18px 16px 0;
+  }
+  .hero-grid {
+    gap: 28px;
+    padding-top: 6px;
+  }
+
+  /* Hero Typography Mobile */
+  .badge-exclusive {
+    padding: 5px 12px;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+    line-height: 1.12;
+    margin-top: 14px;
+  }
+  .hero-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    margin-top: 14px;
+  }
+
+  /* Trust Chips Mobile */
+  .trust-chips-row {
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .trust-chip {
+    padding: 5px 10px;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Hero Stats: Compact 3-Column Grid on Mobile (Doesn't push form down) */
+  .hero-stats {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 20px;
+    border-radius: var(--radius-sm);
+  }
+  .stat-item {
+    padding: 12px 8px;
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 8.5px;
+    letter-spacing: 0.12em;
+  }
+  .stat-value {
+    font-size: 1.05rem;
+    margin-top: 3px;
+  }
+
+  /* Lead Form Card Mobile */
+  .lead-card {
+    padding: 22px 16px;
+    border-radius: var(--radius-md);
+  }
+  .lead-form {
+    gap: 14px;
+  }
+  .phone-input-row {
+    grid-template-columns: 110px 1fr;
+    gap: 6px;
+  }
+  .country-select {
+    padding: 0 6px;
+    font-size: 12.5px;
+  }
+  .phone-number-input {
+    padding: 0 12px;
+  }
+  .btn-submit {
+    height: 48px;
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+  }
+  .submit-guarantee {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  /* Collection Sections Mobile */
+  .collection-section {
+    min-height: auto;
+    padding: 55px 0 50px;
+  }
+  .collection-container {
+    padding: 0 16px;
+  }
+
+  /* High-Contrast Mobile Background Vignette (Text always readable over photos) */
+  .gradient-overlay-left,
+  .gradient-overlay-right {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 11, 19, 0.94) 0%,
+      rgba(7, 11, 19, 0.88) 55%,
+      rgba(7, 11, 19, 0.96) 100%
+    );
+  }
+
+  .project-meta-tag {
+    margin-bottom: 14px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+  .project-brand-logo {
+    height: 70px;
+    margin-bottom: 14px;
+  }
+  .project-brand-logo img {
+    max-height: 65px;
+    max-width: 180px;
+  }
+  .project-highlights-tag {
+    font-size: 11px;
+    padding: 4px 10px;
+    margin-bottom: 12px;
+  }
+  .project-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 18px;
+  }
+
+  /* Features List on Mobile */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    margin-bottom: 16px;
+  }
+  .feature-pill {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+  }
+  .feature-title {
+    margin-top: 0;
+    font-size: 12px;
+  }
+
+  /* Pricing Grid on Mobile: Keep 3 columns side-by-side cleanly */
+  .pricing-grid {
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 18px;
+  }
+  .pricing-pill {
+    padding: 12px 6px;
+    text-align: center;
+  }
+  .pricing-label {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+  .pricing-value {
+    font-size: 1.05rem;
+    margin-top: 2px;
+  }
+
+  /* Project Action Buttons on Mobile */
+  .project-cta-group {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .btn-whatsapp-project,
+  .btn-request-project {
+    width: 100%;
+    height: 48px;
+    font-size: 11px;
+  }
+
+  /* Advantage Section Mobile */
+  .advantage-section {
+    padding: 60px 0;
+  }
+  .advantage-container {
+    padding: 0 16px;
+  }
+  .advantage-title {
+    font-size: clamp(1.8rem, 6.5vw, 2.4rem);
+    margin-top: 16px;
+  }
+  .advantage-subtitle {
+    font-size: 13.5px;
+    line-height: 1.65;
+    margin-top: 14px;
+  }
+  .advantage-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 30px;
+    background: transparent;
+    border: none;
+  }
+  .advantage-card {
+    padding: 22px 18px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+  }
+  .advantage-card-title {
+    font-size: 1.25rem;
+  }
+  .advantage-card-desc {
+    font-size: 13px;
+    line-height: 1.55;
+    margin-top: 6px;
+  }
+
+  /* Footer Mobile */
+  .site-footer {
+    padding: 55px 16px 85px;
+  }
+  .footer-disclaimer {
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 24px;
+  }
+  .footer-nav {
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 20px;
+    font-size: 11px;
+  }
+
+  /* Floating WhatsApp on Mobile: Perfectly docked */
+  .floating-whatsapp {
+    bottom: 18px;
+    right: 16px;
+    height: 48px;
+    padding: 0 18px;
+    font-size: 11px;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
+  }
+  .floating-whatsapp svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Legal Pages Mobile */
+  .legal-main {
+    padding: 30px 16px 60px;
+  }
+  .legal-title {
+    font-size: 2.2rem;
+  }
+  .legal-intro,
+  .legal-body {
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Extra small screens like iPhone SE / older Androids */
+  .phone-input-row {
+    grid-template-columns: 100px 1fr;
+    gap: 4px;
+  }
+  .country-select {
+    padding: 0 4px;
+    font-size: 11.5px;
+  }
+  .stat-value,
+  .pricing-value {
+    font-size: 0.95rem;
+  }
+  .stat-label,
+  .pricing-label {
+    font-size: 7.5px;
+  }
+  .hero-title {
+    font-size: 1.95rem;
+  }
 }
