@@ -1,6 +1,6 @@
 /**
  * Mountain View Luxury Landing Page - properties-e
- * High-Conversion Interactive JavaScript & Zapier Webhook Integration
+ * High-Conversion Interactive JavaScript & Live Zapier Webhook Integration
  */
 
 // ============================================================================
@@ -27,6 +27,7 @@ function initFormHandler() {
 
   const submitBtn = form.querySelector('.btn-submit');
   const phoneInput = form.querySelector('input[name="phoneNumber"]');
+  const countrySelect = form.querySelector('select[name="countryCode"]');
   const formSuccessBox = document.getElementById('form-success-box');
 
   // Format phone input nicely (digits only)
@@ -41,8 +42,8 @@ function initFormHandler() {
 
     const formData = new FormData(form);
     const fullName = (formData.get('fullName') || '').toString().trim();
-    const phoneNumber = (formData.get('phoneNumber') || '').toString().trim();
-    const project = (formData.get('project') || 'Mountain View General Inquiry').toString();
+    const rawPhone = (formData.get('phoneNumber') || '').toString().trim();
+    const countryCode = countrySelect ? countrySelect.value : '+20';
 
     // Validation
     if (!fullName || fullName.length < 2) {
@@ -50,10 +51,17 @@ function initFormHandler() {
       return;
     }
 
-    if (!phoneNumber || phoneNumber.length < 9) {
-      alert('Please enter a valid phone number (e.g. 01033373331).');
+    if (!rawPhone || rawPhone.length < 7) {
+      alert('Please enter a valid mobile number.');
       return;
     }
+
+    // Strip leading 0 if present and country code is attached
+    let sanitizedPhone = rawPhone;
+    if (sanitizedPhone.startsWith('0')) {
+      sanitizedPhone = sanitizedPhone.substring(1);
+    }
+    const fullPhoneNumber = `${countryCode}${sanitizedPhone}`;
 
     // Set Loading State
     if (submitBtn) {
@@ -70,11 +78,10 @@ function initFormHandler() {
     // Prepare Webhook Payload matching Zapier requirements
     const data = {
       fullName: fullName,
-      phoneNumber: phoneNumber,
+      phoneNumber: fullPhoneNumber,
       landingPageUrl: window.location.href,
       submissionDate: new Date().toISOString(),
-      // Helpful supplementary data for properties-e CRM
-      project: project,
+      countryCode: countryCode,
       consultancy: 'properties-e',
       utm_source: utm_source,
       utm_medium: utm_medium,
@@ -97,17 +104,17 @@ function initFormHandler() {
       }
 
       // Also trigger the luxury modal for high-engagement conversion
-      showSuccessModal(fullName, project);
+      showSuccessModal(fullName, fullPhoneNumber);
       form.reset();
 
     } catch (error) {
       console.error('Submission notification:', error);
-      // Ensure smooth user experience even if browser restricts CORS response
+      // Graceful fallback display
       if (formSuccessBox) {
         form.style.display = 'none';
         formSuccessBox.style.display = 'block';
       }
-      showSuccessModal(fullName, project);
+      showSuccessModal(fullName, fullPhoneNumber);
     } finally {
       if (submitBtn) {
         submitBtn.classList.remove('loading');
@@ -118,27 +125,23 @@ function initFormHandler() {
 }
 
 /**
- * Quick-action: clicking "Request Price Sheet" on any project card
- * scrolls to the form and pre-selects that project
+ * Quick-action: clicking "Request Floor Plans & Prices" on any project card
+ * scrolls directly to the form and focuses the name input
  */
 function initProjectFormTriggers() {
   const triggerBtns = document.querySelectorAll('.trigger-project-form');
-  const projectSelect = document.getElementById('project');
   const formCard = document.querySelector('.lead-card');
+  const nameInput = document.getElementById('fullName');
 
   triggerBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const targetProject = btn.getAttribute('data-project');
-      
-      if (projectSelect && targetProject) {
-        projectSelect.value = targetProject;
-      }
-
       if (formCard) {
         formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Add subtle focus glow
         formCard.classList.add('highlight-form');
+        if (nameInput) {
+          setTimeout(() => nameInput.focus(), 600);
+        }
         setTimeout(() => {
           formCard.classList.remove('highlight-form');
         }, 1500);
@@ -150,7 +153,7 @@ function initProjectFormTriggers() {
 /**
  * Success modal display with instant WhatsApp follow-up CTA
  */
-function showSuccessModal(name, project) {
+function showSuccessModal(name, phone) {
   const modal = document.getElementById('success-modal');
   if (!modal) return;
 
@@ -161,7 +164,7 @@ function showSuccessModal(name, project) {
 
   const waBtn = modal.querySelector('.btn-modal-wa');
   if (waBtn) {
-    const encodedMsg = encodeURIComponent(`Hello properties-e, I just requested the official price list and availability for ${project}. My name is ${name}.`);
+    const encodedMsg = encodeURIComponent(`Hello properties-e, I just submitted an inquiry for Mountain View residences. My name is ${name} (${phone}).`);
     waBtn.href = `https://wa.me/${WHATSAPP_INTL}?text=${encodedMsg}`;
   }
 
